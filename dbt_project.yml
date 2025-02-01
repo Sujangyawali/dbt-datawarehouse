@@ -40,8 +40,9 @@ models:
     # Applies to all files under models/example/
     stage:
       +materialized: view
-    temp:
-      materialized: table
-    semantic:
-    materialized: table
+    temp: 
+      schema: temp
+    dwh_target:
+      schema: target
+      
 
