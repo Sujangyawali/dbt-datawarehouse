@@ -1,9 +1,8 @@
 {{ config(
-    materialized='incremental',
+    materialized='custom_incremental',
     unique_key='CTGRY_ID',
-    merge_update_columns=['CTGRY_DESC'],
-    alias='D_RETAIL_CTGRY_T',
-    insert_by_period='custom_insert'
+    merge_update_columns=['CTGRY_DESC', 'ROW_UPDT_TMS'],
+    alias='D_RETAIL_CTGRY_T'
 ) }}
 
 SELECT 
@@ -13,7 +12,3 @@ SELECT
   CURRENT_TIMESTAMP AS ROW_INSRT_TMS,
   CURRENT_TIMESTAMP AS ROW_UPDT_TMS
 FROM {{ ref('category_temp') }}
-
-{% if is_incremental() %}
-  WHERE CTGRY_ID NOT IN (SELECT CTGRY_ID FROM {{ this }})
-{% endif %}
