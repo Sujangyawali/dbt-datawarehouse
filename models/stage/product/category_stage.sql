@@ -1,4 +1,4 @@
 SELECT
     ID AS CTGRY_ID,
     CATEGORY_DESC AS CTGRY_DESC
-FROM RETAIL_DWH.STAGE.STG_CATEGORY
+FROM {{ source('product_stage', 'stg_category')}}

@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: product_stage
+    database: retail_dwh  
+    schema: stage  
+    tables:
+      - name: stg_category
+      - name: stg_subcategory

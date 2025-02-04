@@ -1,7 +1,6 @@
 {{ config(
-  materialized='table',
+  materialized='temp_truncate_insert',
   alias='tmp_category',
-  pre_hook="TRUNCATE TABLE {{ this }}"
 ) }}
 
 SELECT 
