@@ -1,4 +1,4 @@
-{% materialization category_upsert, adapter='snowflake' %}
+{% materialization subcategory_upsert, adapter='snowflake' %}
     {% set unique_key = config.get('unique_key') %}
     {% set merge_update_columns = config.get('merge_update_columns') %}
 
@@ -18,14 +18,16 @@
                 {% if not loop.last %}, {% endif %}
             {% endfor %}
         WHEN NOT MATCHED THEN INSERT (
-            CTGRY_ID,
-            CTGRY_DESC,
+            SUB_CTGRY_ID,
+            CTGRY_KY,
+            SUB_CTGRY_DESC,
             OPEN_CLOSE_CD,
             ROW_INSRT_TMS,
             ROW_UPDT_TMS
         ) VALUES (
-            DBT_INTERNAL_SOURCE.CTGRY_ID,
-            DBT_INTERNAL_SOURCE.CTGRY_DESC,
+            DBT_INTERNAL_SOURCE.SUB_CTGRY_ID,
+            DBT_INTERNAL_SOURCE.CTGRY_KY,
+            DBT_INTERNAL_SOURCE.SUB_CTGRY_DESC,
             DBT_INTERNAL_SOURCE.OPEN_CLOSE_CD,
             DBT_INTERNAL_SOURCE.ROW_INSRT_TMS,
             DBT_INTERNAL_SOURCE.ROW_UPDT_TMS

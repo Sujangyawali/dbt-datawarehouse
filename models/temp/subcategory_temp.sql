@@ -4,7 +4,7 @@
 ) }}
 
 SELECT 
-  SUBCAT.ID,
+  SUBCAT.ID AS SUB_CTGRY_ID,
   CAT.CTGRY_KY,
   SUBCAT.SUBCATEGORY_DESC
 FROM {{ ref('subcategory_stage') }} AS SUBCAT
