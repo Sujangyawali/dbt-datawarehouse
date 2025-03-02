@@ -1,5 +1,5 @@
 {{ config(
-    materialized='custom_incremental',
+    materialized='category_upsert',
     unique_key='CTGRY_ID',
     merge_update_columns=['CTGRY_DESC', 'ROW_UPDT_TMS'],
     alias='D_RETAIL_CTGRY_T'
