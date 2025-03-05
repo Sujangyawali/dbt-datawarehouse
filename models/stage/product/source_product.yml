@@ -7,3 +7,4 @@ sources:
     tables:
       - name: stg_category
       - name: stg_subcategory
+      - name: stg_product
