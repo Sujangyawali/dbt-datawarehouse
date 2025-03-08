@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: organization_stage
+    database: retail_dwh  
+    schema: stage  
+    tables:
+      - name: stg_country
+      - name: stg_region
+      - name: stg_store
