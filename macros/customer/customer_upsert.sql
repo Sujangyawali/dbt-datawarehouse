@@ -1,0 +1,45 @@
+{% materialization customer_upsert, adapter='snowflake' %}
+    {% set unique_key = config.get('unique_key') %}
+    {% set merge_update_columns = config.get('merge_update_columns') %}
+
+    {% set target_relation = adapter.get_relation(database=this.database, schema=this.schema, identifier=this.identifier) %}
+
+    {% set merge_sql %}
+        MERGE INTO {{ target_relation }} AS DBT_INTERNAL_DEST
+        USING ({{ sql }}) AS DBT_INTERNAL_SOURCE
+        ON DBT_INTERNAL_SOURCE.{{ unique_key }} = DBT_INTERNAL_DEST.{{ unique_key }}
+        WHEN MATCHED THEN UPDATE SET
+             {% for column in merge_update_columns %}
+                {% if column == 'ROW_UPDT_TMS' %}
+                    {{ column }} = CURRENT_TIMESTAMP
+                {% else %}
+                    {{ column }} = DBT_INTERNAL_SOURCE.{{ column }}
+                {% endif %}
+                {% if not loop.last %}, {% endif %}
+            {% endfor %}
+        WHEN NOT MATCHED THEN INSERT (
+            CUSTOMER_ID,
+            CUSTOMER_FST_NM,
+            CUSTOMER_MID_NM,
+            CUSTOMER_LST_NM,
+            CUSTOMER_ADDR,
+            OPEN_CLOSE_CD,
+            ROW_INSRT_TMS,
+            ROW_UPDT_TMS
+        ) VALUES (
+            DBT_INTERNAL_SOURCE.CUSTOMER_ID,
+            DBT_INTERNAL_SOURCE.CUSTOMER_FST_NM,
+            DBT_INTERNAL_SOURCE.CUSTOMER_MID_NM,
+            DBT_INTERNAL_SOURCE.CUSTOMER_LST_NM,
+            DBT_INTERNAL_SOURCE.CUSTOMER_ADDR,
+            DBT_INTERNAL_SOURCE.OPEN_CLOSE_CD,
+            DBT_INTERNAL_SOURCE.ROW_INSRT_TMS,
+            DBT_INTERNAL_SOURCE.ROW_UPDT_TMS
+        );
+    {% endset %}
+
+    {%- call statement('main') -%}
+        {{ merge_sql }}
+    {%- endcall -%}
+    {{ return({"relations": [target_relation]}) }}
+{% endmaterialization %}
