@@ -1,0 +1,8 @@
+version: 2
+
+sources:
+  - name: customer_stage
+    database: retail_dwh  
+    schema: stage  
+    tables:
+      - name: stg_customer
