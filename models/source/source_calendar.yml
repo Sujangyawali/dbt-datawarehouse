@@ -1,0 +1,8 @@
+version: 2
+
+sources:
+  - name: calendar_target
+    database: retail_dwh  
+    schema: target  
+    tables:
+      - name: d_retail_time_day_t

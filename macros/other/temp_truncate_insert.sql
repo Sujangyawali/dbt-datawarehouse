@@ -2,6 +2,10 @@
 
     {% set target_relation = adapter.get_relation(database=this.database, schema=this.schema, identifier=this.identifier) %}
 
+    {% if target_relation is none %}
+        {% do exceptions.raise_compiler_error("Target relation " ~ this.database ~ "." ~ this.schema ~ "." ~ this.identifier ~ " does not exist.") %}
+    {% endif %}
+
     {% set insert_sql %}
         TRUNCATE TABLE {{ target_relation }};
         INSERT INTO {{ target_relation }}
